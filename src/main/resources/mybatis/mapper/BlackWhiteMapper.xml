@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asterisk.opensource.dao.BlackWhiteDao">
+
+    <resultMap id="BaseResultMap" type="com.asterisk.opensource.domain.BlackWhite">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="black_white_type" jdbcType="INTEGER" property="blackWhiteType" />
+    <result column="server" jdbcType="VARCHAR" property="server" />
+    </resultMap>
+
+    <sql id="base_param" >
+        id,black_white_type,server
+    </sql>
+
+    <select id="findWhiteList" resultMap="BaseResultMap">
+        select
+        <include refid="base_param" />
+        from black_white_list
+        <where>
+            black_white_type=1
+        </where>
+    </select>
+
+    <select id="findBlackList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_param" />
+        from black_white_list
+        <where>
+            black_white_type=0
+        </where>
+    </select>
+
+
+
+</mapper>

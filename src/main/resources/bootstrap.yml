@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: hermes
+  cloud:
+    config:
+      enabled: false
+
+
+server:
+  port: 8888
+
+
+
