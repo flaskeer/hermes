@@ -38,7 +38,7 @@ public class HermesApplication {
         Environment env = app.run(args).getEnvironment();
         LOGGER.info("\n----------------------------------------------------------\n\t" +
                         "Application '{}' is running! Access URLs:\n\t" +
-                        "Local: \t\thttps://127.0.0.1:{}\n\t",
+                        "Local: \t\thttp://127.0.0.1:{}\n\t",
                 env.getProperty("spring.application.name"),
                 env.getProperty("server.port"));
 
