@@ -1,4 +1,4 @@
-package com.asterisk.opensource.spider.processor;
+package com.asterisk.opensource.spider.processor.impl;
 
 import com.asterisk.opensource.domain.News;
 import com.asterisk.opensource.spider.parser.HtmlParser;
