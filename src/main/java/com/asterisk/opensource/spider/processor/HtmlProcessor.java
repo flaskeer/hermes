@@ -9,7 +9,7 @@ import java.util.List;
  * @Date 17/1/7
  * @Time 上午11:52
  */
-public interface HtmlProcessor extends Processor{
+public interface HtmlProcessor<T> extends Processor{
 
-    <T> List<T> htmlProcess(Document document);
+    List<T> htmlProcess(Document document);
 }

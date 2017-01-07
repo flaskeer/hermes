@@ -27,6 +27,7 @@
         <fastjson.version>1.2.22</fastjson.version>
         <webmagic.version>0.6.0</webmagic.version>
         <gson.version>2.7</gson.version>
+        <feign-gson.version>8.18.0</feign-gson.version>
     </properties>
 
 
@@ -77,6 +78,18 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.feign</groupId>
+            <artifactId>feign-gson</artifactId>
+            <version>${feign-gson.version}</version>
         </dependency>
 
         <dependency>
