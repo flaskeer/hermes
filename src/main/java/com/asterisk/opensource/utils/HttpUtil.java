@@ -115,34 +115,6 @@ public class HttpUtil {
         return getResult(post);
 	}
 
-    /*
-    *   <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>4.5.1</version>
-        </dependency>
-    *
-    *   这儿需要这个包
-    * */
-	/*public static String uploadRequest(String uri, Map<String, String> rawParams,
-									   Map<String, File> fileParams, Map<String, String> headerParams) {
-		HttpPost post = new HttpPost(uri);
-		initHeader(post, headerParams);
-        MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create()
-                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		if (fileParams != null) {
-			for (String key : fileParams.keySet()) {
-                entityBuilder.addPart(key, new FileBody(fileParams.get(key)));
-			}
-		}
-		if (rawParams != null) {
-			for (String key : rawParams.keySet()) {
-                entityBuilder.addPart(key, new StringBody(rawParams.get(key), ContentType.TEXT_PLAIN));
-			}
-		}
-		post.setEntity(entityBuilder.build());
-		return getResult(post);
-	}*/
 
 	public static String postRequest(String uri, Map<String, String> rawParams) {
 		return postRequest(uri, rawParams, null);
