@@ -28,7 +28,7 @@ public class AsyncConfiguration implements AsyncConfigurer{
     public Executor getAsyncExecutor() {
         LOGGER.debug("creating Async Task Executor");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
+        executor.setCorePoolSize(100);
         executor.setMaxPoolSize(200);
         executor.setQueueCapacity(50000);
         executor.setThreadNamePrefix("gateway-Executor-");

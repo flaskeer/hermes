@@ -1,6 +1,7 @@
 package com.asterisk.opensource.spider.transfer;
 
 import com.alibaba.fastjson.JSON;
+import com.asterisk.opensource.async.ExceptionHandlingAsyncTaskExecutor;
 import com.asterisk.opensource.domain.News;
 import com.asterisk.opensource.utils.HttpUtil;
 import com.asterisk.opensource.utils.MyStringUtil;
@@ -33,6 +34,9 @@ public class SinaTransfer {
     public static final String FAILURE_URLS = "failure_urls";
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private ExceptionHandlingAsyncTaskExecutor asyncTaskExecutor;
 
     public  List<String> getUrls() {
         String listUrl = "http://platform.sina.com.cn/news/news_list";
@@ -74,14 +78,17 @@ public class SinaTransfer {
             if (url == null) {
                 break;
             }
-            String request = HttpUtil.getRequest(url);
-            if (Strings.isNullOrEmpty(request)) {
-                log.warn("请求url:{} 失败，将当前请求加入失败队列", url);
-                stringRedisTemplate.opsForList().leftPush(FAILURE_URLS, url);
-                continue;
-            }
-            List<LinkedHashMap<String, String>> datas = JsonPath.read(request, "$['result']['data'][*]");
-            dealData(datas, path);
+            asyncTaskExecutor.execute(() -> {
+                String request = HttpUtil.getRequest(url);
+                if (Strings.isNullOrEmpty(request)) {
+                    log.warn("请求url:{} 失败，将当前请求加入失败队列", url);
+                    stringRedisTemplate.opsForList().leftPush(FAILURE_URLS, url);
+                } else {
+                    List<LinkedHashMap<String, String>> datas = JsonPath.read(request, "$['result']['data'][*]");
+                    dealData(datas, path);
+                }
+            });
+
         }
     }
 
