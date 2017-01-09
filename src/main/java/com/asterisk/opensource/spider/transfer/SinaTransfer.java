@@ -51,7 +51,8 @@ public class SinaTransfer {
         String total = JsonPath.read(data, "$['result']['total']");
         Integer num = Integer.parseInt(total);
         List<String> urls = Lists.newArrayListWithExpectedSize(num);
-        if (stringRedisTemplate.opsForList().range(SINA_NEWS_URLS,0,-1).size() > 0) {
+        List<String> list = stringRedisTemplate.opsForList().range(SINA_NEWS_URLS, 0, -1);
+        if (list != null && list.size() > 0) {
             stringRedisTemplate.delete(SINA_NEWS_URLS);
         }
         for (Integer i = 0; i < num; i++) {
