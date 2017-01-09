@@ -51,6 +51,9 @@ public class SinaTransfer {
         String total = JsonPath.read(data, "$['result']['total']");
         Integer num = Integer.parseInt(total);
         List<String> urls = Lists.newArrayListWithExpectedSize(num);
+        if (stringRedisTemplate.opsForList().range(SINA_NEWS_URLS,0,-1).size() > 0) {
+            stringRedisTemplate.delete(SINA_NEWS_URLS);
+        }
         for (Integer i = 0; i < num; i++) {
             String url = "http://platform.sina.com.cn/news/news_list?app_key=2872801998&show_cat=1&show_num=10&channel=mil&cat_1=dgby&format=json&tag=1&page=" + i + "&show_all=0&show_ext=1";
             stringRedisTemplate.opsForList().leftPush(SINA_NEWS_URLS,url);
