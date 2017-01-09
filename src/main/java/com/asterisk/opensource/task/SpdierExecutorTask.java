@@ -23,7 +23,9 @@ public class SpdierExecutorTask {
     private SinaTransfer sinaTransfer;
 
 
-
+    /**
+     * 这个做一次全量更新
+     */
     @Scheduled(fixedRate = 50000000)
     public void schedule() {
         log.info("开始执行爬虫任务.......");
