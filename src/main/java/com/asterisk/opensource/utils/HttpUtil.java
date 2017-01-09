@@ -156,7 +156,7 @@ public class HttpUtil {
 			HttpEntity entity = httpResponse.getEntity();
 			return EntityUtils.toString(entity);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("请求失败,error:{}",e);
 		}
 		return null;
 	}
