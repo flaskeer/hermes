@@ -29,6 +29,7 @@
         <gson.version>2.7</gson.version>
         <feign-gson.version>8.18.0</feign-gson.version>
         <spring.kafka.version>1.1.1.RELEASE</spring.kafka.version>
+        <commons-io.version>2.4</commons-io.version>
     </properties>
 
 
@@ -106,6 +107,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
         </dependency>
@@ -148,6 +154,12 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>${jodatime.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <dependency>

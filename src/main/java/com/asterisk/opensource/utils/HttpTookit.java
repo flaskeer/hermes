@@ -13,6 +13,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,17 +46,8 @@ public class HttpTookit {
     		return null;
     	}
     	try {
-    		if(params != null && !params.isEmpty()){
-    			List<NameValuePair> pairs = new ArrayList<NameValuePair>(params.size());
-    			for(Map.Entry<String,String> entry : params.entrySet()){
-    				String value = entry.getValue();
-    				if(value != null){
-    					pairs.add(new BasicNameValuePair(entry.getKey(),value));
-    				}
-    			}
-    			url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairs, charset));
-    		}
-    		HttpGet httpGet = new HttpGet(url);
+			url = HttpUtil.getParameters(url, params, charset);
+			HttpGet httpGet = new HttpGet(url);
     		CloseableHttpResponse response = httpClient.execute(httpGet);
     		int statusCode = response.getStatusLine().getStatusCode();
     		if (statusCode != 200) {
@@ -75,8 +67,10 @@ public class HttpTookit {
     	}
     	return null;
     }
-    
-    /**
+
+
+
+	/**
      * HTTP Post 获取内容
      * @param url  请求的url地址 ?之前的地址
      * @param params	请求的参数

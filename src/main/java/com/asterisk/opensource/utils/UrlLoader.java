@@ -41,6 +41,7 @@ public class UrlLoader {
         return readResources("classpath:urls.txt");
     }
 
+    @SuppressWarnings("unchecked")
     private static List<String> readResources(String location) throws IOException {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(location);
         return IOUtils.readLines(inputStream);

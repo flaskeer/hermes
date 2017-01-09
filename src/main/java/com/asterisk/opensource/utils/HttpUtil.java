@@ -1,5 +1,7 @@
 package com.asterisk.opensource.utils;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -22,6 +24,7 @@ import org.apache.http.util.EntityUtils;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -29,11 +32,12 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Http Util
  */
-
+@Slf4j
 public class HttpUtil {
 
     /**
@@ -47,15 +51,15 @@ public class HttpUtil {
 	/**
 	 * 获取连接的最大等待时间
 	 */
-	public final static int WAIT_TIMEOUT = 6000;
+	public final static int WAIT_TIMEOUT = 1000;
 	/**
 	 * 连接超时时间
 	 */
-	public final static int CONNECT_TIMEOUT = 10000;
+	public final static int CONNECT_TIMEOUT = 1000;
 	/**
 	 * 读取超时时间
 	 */
-	public final static int READ_TIMEOUT = 60000;
+	public final static int READ_TIMEOUT = 1000;
     private static final byte[] lock = new byte[0];
 
     private static volatile CloseableHttpClient defaultHttpClient;
@@ -107,9 +111,7 @@ public class HttpUtil {
 		initHeader(post, headerParams);
 		List<NameValuePair> params = new ArrayList<>();
 		if (rawParams != null) {
-			for (String key : rawParams.keySet()) {
-				params.add(new BasicNameValuePair(key, rawParams.get(key)));
-			}
+			params.addAll(rawParams.keySet().stream().map(key -> new BasicNameValuePair(key, rawParams.get(key))).collect(Collectors.toList()));
 		}
         post.setEntity(new UrlEncodedFormEntity(params, Consts.UTF_8));
         return getResult(post);
@@ -157,6 +159,55 @@ public class HttpUtil {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * HTTP Get 获取内容
+	 * @param url  请求的url地址 ?之前的地址
+	 * @param params	请求的参数
+	 * @param charset	编码格式
+	 * @return	页面内容
+	 */
+	public static String getRequest(String url,Map<String,String> params,String charset){
+		CloseableHttpClient httpClient = getHttpClient();
+		if(StringUtils.isBlank(url)){
+			return null;
+		}
+		try {
+			url = getParameters(url, params, charset);
+			HttpGet httpGet = new HttpGet(url);
+			CloseableHttpResponse response = httpClient.execute(httpGet);
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode >= 400) {
+				httpGet.abort();
+				throw new RuntimeException("HttpClient,error status code :" + statusCode);
+			}
+			HttpEntity entity = response.getEntity();
+			String result = null;
+			if (entity != null){
+				result = EntityUtils.toString(entity, Charset.defaultCharset());
+			}
+			EntityUtils.consume(entity);
+			response.close();
+			return result;
+		} catch (Exception e) {
+			log.error("请求异常,error :{}",e);
+		}
+		return null;
+	}
+
+	public static String getParameters(String url, Map<String, String> params, String charset) throws IOException {
+		if(params != null && !params.isEmpty()){
+            List<NameValuePair> pairs = new ArrayList<>(params.size());
+            for(Map.Entry<String,String> entry : params.entrySet()){
+                String value = entry.getValue();
+                if(value != null){
+                    pairs.add(new BasicNameValuePair(entry.getKey(),value));
+                }
+            }
+            url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairs, charset));
+        }
+		return url;
 	}
 
 	/**
