@@ -10,27 +10,27 @@ import java.io.IOException;
 
 public class HtmlParser {
 
-	private News news;
+    private News news;
 
-	public HtmlParser(News news) {
-		this.news = news;
-	}
+    public HtmlParser(News news) {
+        this.news = news;
+    }
 
-	public News parseHtmlToString(){
-		try {
-			Document doc = Jsoup.connect(news.getUrl())
-				 .get();
-			Element div = doc.select("#artibody.content").first();
-			String context = HTMLSpirit.delHTMLTag(div.html());
-			this.news.setContext(context);
-			return news;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return news;
-		}
-	}
-	
-	public HtmlParser() {
-		super();
-	}
+    public News parseHtmlToString() {
+        try {
+            Document doc = Jsoup.connect(news.getUrl())
+                    .get();
+            Element div = doc.select("#artibody.content").first();
+            String context = HTMLSpirit.delHTMLTag(div.html());
+            this.news.setContext(context);
+            return news;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return news;
+        }
+    }
+
+    public HtmlParser() {
+        super();
+    }
 }
