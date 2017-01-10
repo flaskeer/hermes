@@ -23,11 +23,6 @@ public class XinLanNewsPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setRetryTimes(3).setSleepTime(1000);
 
-    @Override
-    public Site getSite() {
-        return site;
-    }
-
     public static String[] getUrls() {
         String getUrl = "http://platform.sina.com.cn/news/news_list";
         Map<String, String> params = Maps.newHashMap();
@@ -53,6 +48,24 @@ public class XinLanNewsPageProcessor implements PageProcessor {
         return urls;
     }
 
+    public static void main(String[] args) {
+        String[] urls = getUrls();
+        Spider.create(new XinLanNewsPageProcessor())
+                // 从"https://github.com/code4craft"开始抓
+                .addPipeline(new ConsolePipeline())
+                .addPipeline(new JsonPipeline())
+                .addUrl(urls)
+                // 开启5个线程抓取
+                .thread(10)
+                // 启动爬虫
+                .run();
+    }
+
+    @Override
+    public Site getSite() {
+        return site;
+    }
+
     @Override
     public void process(Page page) {
         // 部分二：定义如何抽取页面信息，并保存下来
@@ -69,19 +82,6 @@ public class XinLanNewsPageProcessor implements PageProcessor {
             news = new HtmlParser(news).parseHtmlToString();
             page.putField("news", news);
         }
-    }
-
-    public static void main(String[] args) {
-        String[] urls = getUrls();
-        Spider.create(new XinLanNewsPageProcessor())
-                // 从"https://github.com/code4craft"开始抓
-                .addPipeline(new ConsolePipeline())
-                .addPipeline(new JsonPipeline())
-                .addUrl(urls)
-                // 开启5个线程抓取
-                .thread(10)
-                // 启动爬虫
-                .run();
     }
 
 
