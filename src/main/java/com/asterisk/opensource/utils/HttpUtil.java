@@ -59,7 +59,7 @@ public class HttpUtil {
 	/**
 	 * 读取超时时间
 	 */
-	public final static int READ_TIMEOUT = 1000;
+	public final static int READ_TIMEOUT = 1000000;
     private static final byte[] lock = new byte[0];
 
     private static volatile CloseableHttpClient defaultHttpClient;
@@ -221,5 +221,20 @@ public class HttpUtil {
 				request.addHeader(key, headerParams.get(key));
 			}
 		}
+	}
+
+	public static String getRequest(String uri,String contentEnCoding) {
+		HttpGet get = new HttpGet(uri);
+		return getResult(get,contentEnCoding);
+	}
+	private static String getResult(HttpUriRequest request,String contentEncoding) {
+		CloseableHttpClient httpClient = getHttpClient();
+		try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+			HttpEntity entity = httpResponse.getEntity();
+			return EntityUtils.toString(entity,contentEncoding);
+		} catch (IOException e) {
+			log.error("请求失败,error:{}",e);
+		}
+		return null;
 	}
 }

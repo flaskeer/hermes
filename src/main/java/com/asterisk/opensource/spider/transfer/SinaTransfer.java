@@ -87,7 +87,6 @@ public class SinaTransfer {
     public void parseAndStore(String path) {
         sinaQueue(path, SINA_NEWS_URLS);
 
-
     }
 
     private void sinaQueue(String path, String sinaNewsUrls) {
