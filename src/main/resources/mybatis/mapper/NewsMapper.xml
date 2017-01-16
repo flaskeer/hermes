@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.asterisk.opensource.dao.NewsMapper" >
+
+	<resultMap id="baseResultMap" type="com.asterisk.opensource.domain.News">
+		<id column="id" property="id" />
+		<result column="url" property="url" />
+		<result column="keywords" property="keywords" />
+		<result column="title" property="title" />
+		<result column="context" property="context" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.asterisk.opensource.domain.News" useGeneratedKeys="true" keyProperty="id">
+	  insert into `news` (url,keywords,title,context)
+	  values (#{url},#{keywords},#{title},#{context})
+	</insert>
+
+	<delete id="delete">
+		delete from `news` where id = #{id}
+	</delete>
+
+	<update id="update" parameterType="com.asterisk.opensource.domain.News">
+		update `news`
+		<set>
+			url = #{url},
+			keywords = #{keywords},
+			title = #{title},
+			context = #{context},
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="merge">
+		update `news`
+			<set>
+				<foreach collection="fields" item="field">
+				<choose>
+					<when test="field == 'url'">url = #{news.url},</when>
+					<when test="field == 'keywords'">keywords = #{news.keywords},</when>
+					<when test="field == 'title'">title = #{news.title},</when>
+					<when test="field == 'context'">context = #{news.context},</when>
+				</choose>
+				</foreach>
+			</set>
+		where id = #{news.id}
+	</update>
+
+	<select id="findOne" resultMap="baseResultMap" parameterType="long">
+		select
+		id,url,keywords,title,context
+		from `news`
+		where id = #{id}
+	</select>
+
+	<select id="findAll" resultMap="baseResultMap">
+		select
+		id,url,keywords,title,context
+		from `news`
+		order by id desc
+	</select>
+
+</mapper>
