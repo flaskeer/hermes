@@ -1,4 +1,4 @@
-package com.asterisk.opensource.dao;
+package com.asterisk.opensource.mapper;
 
 import org.springframework.stereotype.Repository;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 
 @Repository
-public interface BlackWhiteDao {
+public interface BlackWhiteMapper {
 
     List<String> findWhiteList();
 

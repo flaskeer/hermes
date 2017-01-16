@@ -1,4 +1,4 @@
-package com.asterisk.opensource.domain;
+package com.asterisk.opensource.vo;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,14 +14,14 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class NeteaseNews {
+public class NeteaseNewsVo {
 
     private String title;
-    private String keywords;
+    private List<?> keywords;
     private String commenturl;
     private String tlastid;
 
-    public NeteaseNews(String title,String keywords,String commenturl,String tlastid){
+    public NeteaseNewsVo(String title, List keywords, String commenturl, String tlastid){
         this.title = title;
         this.keywords = keywords;
         this.commenturl = commenturl;

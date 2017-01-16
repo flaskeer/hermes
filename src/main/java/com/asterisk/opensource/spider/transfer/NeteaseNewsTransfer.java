@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.asterisk.opensource.async.ExceptionHandlingAsyncTaskExecutor;
 import com.asterisk.opensource.domain.NeteaseNews;
 import com.asterisk.opensource.utils.HttpUtil;
+import com.asterisk.opensource.vo.NeteaseNewsVo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -19,6 +21,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +78,7 @@ public class NeteaseNewsTransfer {
             int statuCode = response.getStatusLine().getStatusCode();
             if (400 < statuCode) {
                 stringRedisTemplate.opsForList().leftPush(FAILURE_URLS, requestUrl);
+                flag = false;
                 return false;
             }
             stringRedisTemplate.opsForList().leftPush(NETEASE_GUONEI_NEWS_URLS, requestUrl);
@@ -108,11 +112,34 @@ public class NeteaseNewsTransfer {
 
 
     private void datapersisted(String result, String storePath) {
-        List<NeteaseNews> list = beanToJson(result);
-        list.forEach(obj -> {
+        List<NeteaseNewsVo> list = beanToJson(result);
+        List<NeteaseNews> neteaseNewsList = trans(list);
+        neteaseNewsList.forEach(obj -> {
             String json = JSON.toJSONString(obj);
             writeJsonToFile(json + "\n", storePath);
         });
+    }
+
+    private List<NeteaseNews> trans(List<NeteaseNewsVo> list) {
+        List<NeteaseNews> neteaseNewsList = Lists.newArrayList();
+        list.forEach(vo -> {
+            NeteaseNews neteaseNews = new NeteaseNews(vo.getTitle(), listToString(vo.getKeywords()), vo.getCommenturl(), vo.getTlastid());
+            neteaseNewsList.add(neteaseNews);
+        });
+        return neteaseNewsList;
+    }
+
+    @SuppressWarnings("unchecked")
+    private String listToString(Object object) {
+        StringBuilder builder = new StringBuilder();
+        if (object instanceof List) {
+            ArrayList<LinkedTreeMap<String,String>> list = (ArrayList<LinkedTreeMap<String, String>>) object;
+            list.forEach(treeMap -> treeMap.forEach((k, v) -> {
+                builder.append(k).append(":").append(v);
+            }));
+            return builder.toString();
+        }
+        return (String) ((List)object).stream().reduce((v1,v2) -> v1 + (String) v2).get();
     }
 
     private static void writeJsonToFile(String json, String storePath) {
@@ -123,11 +150,11 @@ public class NeteaseNewsTransfer {
         }
     }
 
-    private List<NeteaseNews> beanToJson(String result) {
+    private List<NeteaseNewsVo> beanToJson(String result) {
         String[] tmpJsonStr = result.split("data_callback\\(");
         String json = tmpJsonStr[1].split("\\)")[0];
         Gson gson = new Gson();
-        return gson.fromJson(json, new TypeToken<List<NeteaseNews>>() {
+        return gson.fromJson(json, new TypeToken<List<NeteaseNewsVo>>() {
         }.getType());
     }
 

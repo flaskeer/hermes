@@ -1,4 +1,4 @@
-package com.asterisk.opensource.dao;
+package com.asterisk.opensource.mapper;
 
 
 import com.asterisk.opensource.domain.NeteaseNews;

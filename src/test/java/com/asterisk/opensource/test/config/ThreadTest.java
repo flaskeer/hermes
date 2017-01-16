@@ -68,7 +68,7 @@ public class ThreadTest {
         }
 //        jsonpath动态修改字节码
 //        JSONArray jsonArray =  JsonPath.read(json, "$[0:]");
-//        List<NeteaseNews> netLists = Lists.newArrayList();
+//        List<NeteaseNewsVo> netLists = Lists.newArrayList();
 //        System.out.println(netLists);
 //        Object[] jsons= jsonArray.toArray();
 //        Configuration conf = Configuration.builder()
@@ -78,9 +78,9 @@ public class ThreadTest {
 //                .parse(json)
 //                .read("$[0:]", List.class);
 //        System.out.println(list);
-//        List<NeteaseNews> netLists = Lists.newArrayList();
+//        List<NeteaseNewsVo> netLists = Lists.newArrayList();
 //        for (Map<String,Object> map :list){
-//            NeteaseNews neteaseNews = new NeteaseNews((String)map.get("title"),(String)map.get("keywords"),"",(String)map.get("tlastid"));
+//            NeteaseNewsVo neteaseNews = new NeteaseNewsVo((String)map.get("title"),(String)map.get("keywords"),"",(String)map.get("tlastid"));
 //            netLists.add(neteaseNews);
 //        }
 //        System.out.println(netLists);

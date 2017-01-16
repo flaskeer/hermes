@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.asterisk.opensource.dao.NeteaseNewsMapper" >
+<mapper namespace="com.asterisk.opensource.mapper.NeteaseNewsMapper" >
 
 	<resultMap id="baseResultMap" type="com.asterisk.opensource.domain.NeteaseNews">
 		<result column="title" property="title" />
-		<result column="keywords" property="keywords" />
+		<result column="keywords" property="keywords"/>
 		<result column="commenturl" property="commenturl" />
 		<result column="tlastid" property="tlastid" />
 	</resultMap>
