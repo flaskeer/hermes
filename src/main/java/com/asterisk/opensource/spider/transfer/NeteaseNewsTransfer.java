@@ -36,35 +36,35 @@ public class NeteaseNewsTransfer {
     @Autowired
     private ExceptionHandlingAsyncTaskExecutor asyncTaskExecutor;
 
-    public void storeUrsToQueue(){
+    public void storeUrsToQueue() {
         String starturl = "http://temp.163.com/special/00804KVA/cm_guonei.js";
-        Map<String,String> params = Maps.newHashMap();
+        Map<String, String> params = Maps.newHashMap();
         params.put("callback", "data_callback");
         List<String> urls = Lists.newArrayList();
         urls.add(starturl);
         int x = 2;
-        while(true){
+        while (true) {
             int subpostion = starturl.lastIndexOf(".");
             String url = starturl.substring(0, subpostion);
-            if(x < 10){
-                url = url +"_0"+x+".js";
-            }else{
-                url = url +x+".js";
+            if (x < 10) {
+                url = url + "_0" + x + ".js";
+            } else {
+                url = url + x + ".js";
             }
             String requestUrl = getRequestUrl(url, params);
             boolean flag = isAcessAndPushUrlToQueue(requestUrl);
-            if(flag){
+            if (flag) {
                 x++;
-            }else{
+            } else {
                 break;
             }
         }
     }
 
     private boolean isAcessAndPushUrlToQueue(String requestUrl) {
-        boolean flag = true;
-        if(Strings.isNullOrEmpty(requestUrl)){
-            flag=false;
+        boolean flag;
+        if (Strings.isNullOrEmpty(requestUrl)) {
+            flag = false;
             return flag;
         }
         CloseableHttpClient client = HttpUtil.getHttpClient();
@@ -73,52 +73,51 @@ public class NeteaseNewsTransfer {
         try {
             response = client.execute(httpGet);
             int statuCode = response.getStatusLine().getStatusCode();
-            if(400<statuCode){
-                stringRedisTemplate.opsForList().leftPush(FAILURE_URLS,requestUrl);
-                flag = false;
-                return flag;
+            if (400 < statuCode) {
+                stringRedisTemplate.opsForList().leftPush(FAILURE_URLS, requestUrl);
+                return false;
             }
-            stringRedisTemplate.opsForList().leftPush(NETEASE_GUONEI_NEWS_URLS,requestUrl);
+            stringRedisTemplate.opsForList().leftPush(NETEASE_GUONEI_NEWS_URLS, requestUrl);
         } catch (IOException e) {
-            log.error("访问"+requestUrl+"出错");
+            log.error("访问" + requestUrl + "出错");
         }
         return false;
     }
 
     private void netEaseQueue(String storePath, String neteaseGuoneiNewsUrls) {
-        while(true){
+        while (true) {
             String url = stringRedisTemplate.opsForList().rightPop(neteaseGuoneiNewsUrls);
-            if(Strings.isNullOrEmpty(url)){
+            if (Strings.isNullOrEmpty(url)) {
                 break;
             }
-            asyncTaskExecutor.execute(()->{
+            asyncTaskExecutor.execute(() -> {
                 String result = HttpUtil.getRequest(url, "gbk");
-                datapersisted(result,storePath);
+                datapersisted(result, storePath);
             });
 
         }
     }
 
-    public void failure(String storePath){
-        netEaseQueue(storePath,FAILURE_URLS);
+    public void failure(String storePath) {
+        netEaseQueue(storePath, FAILURE_URLS);
     }
 
-    public void parseAndStore(String storePath){
-        netEaseQueue(storePath,NETEASE_GUONEI_NEWS_URLS);
+    public void parseAndStore(String storePath) {
+        netEaseQueue(storePath, NETEASE_GUONEI_NEWS_URLS);
     }
 
 
     private void datapersisted(String result, String storePath) {
         List<NeteaseNews> list = beanToJson(result);
-        list.forEach(obj->{
+        list.forEach(obj -> {
             String json = JSON.toJSONString(obj);
-            writeJsonToFile(json+"\n",storePath);
+            writeJsonToFile(json + "\n", storePath);
         });
     }
 
-    private static  void writeJsonToFile(String json,String storePath) {
+    private static void writeJsonToFile(String json, String storePath) {
         try {
-            FileUtils.writeStringToFile(new File(storePath),json,true);
+            FileUtils.writeStringToFile(new File(storePath), json, true);
         } catch (IOException e) {
             log.error("存储文件失败");
         }
@@ -128,13 +127,12 @@ public class NeteaseNewsTransfer {
         String[] tmpJsonStr = result.split("data_callback\\(");
         String json = tmpJsonStr[1].split("\\)")[0];
         Gson gson = new Gson();
-        List<NeteaseNews>list=gson.fromJson(json, new TypeToken<List<NeteaseNews>>() {
+        return gson.fromJson(json, new TypeToken<List<NeteaseNews>>() {
         }.getType());
-        return  list;
     }
 
     private String getRequestUrl(String url, Map<String, String> params) {
-        String requestUrl  = null;
+        String requestUrl;
         try {
             requestUrl = HttpUtil.getParameters(url, params, "utf-8");
             return requestUrl;
