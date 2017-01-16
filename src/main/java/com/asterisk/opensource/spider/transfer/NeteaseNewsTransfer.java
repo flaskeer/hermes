@@ -135,7 +135,7 @@ public class NeteaseNewsTransfer {
         if (object instanceof List) {
             ArrayList<LinkedTreeMap<String,String>> list = (ArrayList<LinkedTreeMap<String, String>>) object;
             list.forEach(treeMap -> treeMap.forEach((k, v) -> {
-                builder.append(k).append(":").append(v);
+                builder.append(k).append(":").append(v).append(",");
             }));
             return builder.toString();
         }
