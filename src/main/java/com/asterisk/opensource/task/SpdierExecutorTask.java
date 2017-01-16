@@ -30,7 +30,8 @@ public class SpdierExecutorTask {
     public void schedule() {
         log.info("开始执行爬虫任务.......");
         sinaTransfer.getUrls();
-        sinaTransfer.parseAndStore(STORE_PATH);
+//        sinaTransfer.parseAndStore(STORE_PATH);
+        sinaTransfer.writeDb();
         log.info("爬虫任务结束.....");
     }
 

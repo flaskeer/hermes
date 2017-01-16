@@ -22,13 +22,15 @@ public class FailQueueExecutorTask {
     @Autowired
     private SinaTransfer sinaTransfer;
 
+
     /**
      * 任务补偿 把失败的任务队列定时重试
      */
     @Scheduled(fixedDelay = 5000)
     public void failTask() {
         log.info("开始重新执行失败的任务.....");
-        sinaTransfer.failure(STORE_PATH);
+//        sinaTransfer.failure(STORE_PATH);
+        sinaTransfer.failureToDb();
         log.info("失败任务执行完毕.....");
     }
 

@@ -78,7 +78,7 @@ public class XinLanNewsPageProcessor implements PageProcessor {
             String keywords = (String) jsonObject.get("keywords");
             String title = (String) jsonObject.get("title");
             title = MyStringUtil.decodeUnicode(title);
-            News news = new News(id, url, keywords, title);
+            News news = new News(url, keywords, title);
             news = new HtmlParser(news).parseHtmlToString();
             page.putField("news", news);
         }

@@ -2,15 +2,15 @@
 
 jdbc:
   driverClassName: com.mysql.jdbc.Driver
-  url: jdbc:mysql://127.0.0.1:3306/opensource?useUnicode=true&amp;characterEncoding=UTF-8
+  url: jdbc:mysql://127.0.0.1:3306/opensource?useUnicode=true&characterEncoding=UTF-8
   username: root
-  password:
+  password: 123456
 
 logging:
   level:
     ROOT: INFO
     org.springframework.web: DEBUG
-
+    com.asterisk.opensource.mapper: DEBUG
 
 spring:
   redis:

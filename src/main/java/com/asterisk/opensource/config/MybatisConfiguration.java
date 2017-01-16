@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 
 @org.springframework.context.annotation.Configuration
-@MapperScan("com.asterisk.opensource.dao")
+@MapperScan("com.asterisk.opensource.mapper")
 public class MybatisConfiguration implements ResourceLoaderAware{
 
     private ResourceLoader resourceLoader;

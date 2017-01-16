@@ -9,19 +9,23 @@ import lombok.*;
 @EqualsAndHashCode
 public class News {
 
-	private String id; 
+	private int id;
 	private String url;
 	private String keywords;
 	private String title;
 	private String context;
 
 
-	public News(String id, String url, String keywords, String title) {
+	public News(int id, String url, String keywords, String title) {
 		this.id = id;
 		this.url = url;
 		this.keywords = keywords;
 		this.title = title;
 	}
 
-
+	public News( String url, String keywords, String title) {
+		this.url = url;
+		this.keywords = keywords;
+		this.title = title;
+	}
 }
