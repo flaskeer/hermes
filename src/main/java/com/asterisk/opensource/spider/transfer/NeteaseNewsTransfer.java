@@ -44,7 +44,7 @@ public class NeteaseNewsTransfer {
         urls.add(starturl);
         int x = 2;
         while(true){
-            int subpostion = starturl.lastIndexOf("\\.");
+            int subpostion = starturl.lastIndexOf(".");
             String url = starturl.substring(0, subpostion);
             if(x < 10){
                 url = url +"_0"+x+".js";
