@@ -30,15 +30,33 @@ import java.util.Map;
 @Slf4j
 public class SinaTransfer {
 
-    private static final String SINA_NEWS_URLS = "sina:news:urls";
     public static final String FAILURE_URLS = "failure_urls";
+    private static final String SINA_NEWS_URLS = "sina:news:urls";
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
     private ExceptionHandlingAsyncTaskExecutor asyncTaskExecutor;
 
-    public  List<String> getUrls() {
+    private static void writeStringToFile(String jsonString, File file) {
+        try {
+            FileUtils.writeStringToFile(file, jsonString + "\n", true);
+        } catch (IOException e) {
+            log.error("写入文件失败");
+        }
+    }
+
+    private static String toJson(LinkedHashMap<String, String> data) {
+        String id = data.get("id");
+        String url = data.get("url");
+        String keywords = data.get("keywords");
+        String title = data.get("title");
+        title = MyStringUtil.decodeUnicode(title);
+        News news = new News(id, url, keywords, title);
+        return JSON.toJSONString(news);
+    }
+
+    public List<String> getUrls() {
         String listUrl = "http://platform.sina.com.cn/news/news_list";
         Map<String, String> params = Maps.newHashMap();
         params.put("app_key", "2872801998");
@@ -61,14 +79,13 @@ public class SinaTransfer {
         }
         for (Integer i = 0; i < num; i++) {
             String url = "http://platform.sina.com.cn/news/news_list?app_key=2872801998&show_cat=1&show_num=10&channel=mil&cat_1=dgby&format=json&tag=1&page=" + i + "&show_all=0&show_ext=1";
-            stringRedisTemplate.opsForList().leftPush(SINA_NEWS_URLS,url);
+            stringRedisTemplate.opsForList().leftPush(SINA_NEWS_URLS, url);
         }
-      return urls;
+        return urls;
     }
 
-    public  void parseAndStore(String path) {
+    public void parseAndStore(String path) {
         sinaQueue(path, SINA_NEWS_URLS);
-
 
     }
 
@@ -96,29 +113,11 @@ public class SinaTransfer {
         sinaQueue(path, FAILURE_URLS);
     }
 
-    private void dealData(List<LinkedHashMap<String, String>> datas,String path) {
+    private void dealData(List<LinkedHashMap<String, String>> datas, String path) {
         datas.forEach(data -> {
             String jsonString = toJson(data);
-            writeStringToFile(jsonString,new File(path));
+            writeStringToFile(jsonString, new File(path));
         });
-    }
-
-    private static void writeStringToFile(String jsonString,File file) {
-        try {
-            FileUtils.writeStringToFile(file,jsonString + "\n",true);
-        } catch (IOException e) {
-            log.error("写入文件失败");
-        }
-    }
-
-    private static String toJson(LinkedHashMap<String, String> data) {
-        String id = data.get("id");
-        String url =  data.get("url");
-        String keywords =  data.get("keywords");
-        String title =  data.get("title");
-        title = MyStringUtil.decodeUnicode(title);
-        News news = new News(id,url,keywords,title);
-        return JSON.toJSONString(news);
     }
 
 

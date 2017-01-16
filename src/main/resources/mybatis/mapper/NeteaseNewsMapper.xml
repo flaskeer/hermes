@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.asterisk.opensource.dao.NeteaseNewsMapper" >
+
+	<resultMap id="baseResultMap" type="com.asterisk.opensource.domain.NeteaseNews">
+		<result column="title" property="title" />
+		<result column="keywords" property="keywords" />
+		<result column="commenturl" property="commenturl" />
+		<result column="tlastid" property="tlastid" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.asterisk.opensource.domain.NeteaseNews" useGeneratedKeys="true" keyProperty="id">
+	  insert into `netease_news` (title,keywords,commenturl,tlastid)
+	  values (#{title},#{keywords},#{commenturl},#{tlastid})
+	</insert>
+
+	<delete id="delete">
+		delete from `netease_news` where id = #{id}
+	</delete>
+
+	<update id="update" parameterType="com.asterisk.opensource.domain.NeteaseNews">
+		update `netease_news`
+		<set>
+			title = #{title},
+			keywords = #{keywords},
+			commenturl = #{commenturl},
+			tlastid = #{tlastid},
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="merge">
+		update `netease_news`
+			<set>
+				<foreach collection="fields" item="field">
+				<choose>
+					<when test="field == 'title'">title = #{neteaseNews.title},</when>
+					<when test="field == 'keywords'">keywords = #{neteaseNews.keywords},</when>
+					<when test="field == 'commenturl'">commenturl = #{neteaseNews.commenturl},</when>
+					<when test="field == 'tlastid'">tlastid = #{neteaseNews.tlastid},</when>
+				</choose>
+				</foreach>
+			</set>
+		where id = #{neteaseNews.id}
+	</update>
+
+	<select id="findOne" resultMap="baseResultMap" parameterType="long">
+		select
+		id,title,keywords,commenturl,tlastid
+		from `netease_news`
+		where id = #{id}
+	</select>
+
+	<select id="findAll" resultMap="baseResultMap">
+		select
+		id,title,keywords,commenturl,tlastid
+		from `netease_news`
+		order by id desc
+	</select>
+
+</mapper>
