@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SinaFailQueueExecutorTask {
 
-    private static final String STORE_PATH = "sina.json";
 
     @Autowired
     private SinaTransfer sinaTransfer;
