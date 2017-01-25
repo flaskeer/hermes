@@ -1,5 +1,8 @@
 package com.asterisk.opensource.spider.queue;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
 /**
  * @author donghao
  * @Date 17/1/7
@@ -7,6 +10,8 @@ package com.asterisk.opensource.spider.queue;
  */
 public class RedisMessageQueue implements MessageQueue{
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public QueueProvider queueName() {

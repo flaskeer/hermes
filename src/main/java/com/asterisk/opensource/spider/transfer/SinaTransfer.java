@@ -1,25 +1,21 @@
 package com.asterisk.opensource.spider.transfer;
 
-import com.alibaba.fastjson.JSON;
 import com.asterisk.opensource.async.ExceptionHandlingAsyncTaskExecutor;
-import com.asterisk.opensource.domain.News;
-import com.asterisk.opensource.mapper.NewsMapper;
+import com.asterisk.opensource.service.NewsService;
 import com.asterisk.opensource.utils.HttpUtil;
-import com.asterisk.opensource.utils.MyStringUtil;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.asterisk.opensource.constants.Constants.FAILURE_URLS;
+import static com.asterisk.opensource.constants.Constants.SINA_NEWS_URLS;
 
 /**
  * @author dongh38@ziroom
@@ -29,10 +25,9 @@ import java.util.Map;
  * @Since 1.0.0
  */
 @Slf4j
-public class SinaTransfer {
+public class SinaTransfer implements Transfer{
 
-    public static final String FAILURE_URLS = "failure_urls";
-    private static final String SINA_NEWS_URLS = "sina:news:urls";
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -40,32 +35,10 @@ public class SinaTransfer {
     private ExceptionHandlingAsyncTaskExecutor asyncTaskExecutor;
 
     @Autowired
-    private NewsMapper newsMapper;
+    private NewsService newsService;
 
-    private static void writeStringToFile(String jsonString, File file) {
-        try {
-            FileUtils.writeStringToFile(file, jsonString + "\n", true);
-        } catch (IOException e) {
-            log.error("写入文件失败");
-        }
-    }
-
-    private static String toJson(LinkedHashMap<String, String> data) {
-        News news = getNews(data);
-        return JSON.toJSONString(news);
-    }
-
-    private static News getNews(LinkedHashMap<String, String> data) {
-        String url = data.get("url");
-        String keywords = data.get("keywords");
-        String title = data.get("title");
-        title = MyStringUtil.decodeUnicode(title);
-        return new News(url, keywords, title);
-    }
-
-
-
-    public List<String> getUrls() {
+    @Override
+    public void insertQueue() {
         String listUrl = "http://platform.sina.com.cn/news/news_list";
         Map<String, String> params = Maps.newHashMap();
         params.put("app_key", "2872801998");
@@ -81,7 +54,6 @@ public class SinaTransfer {
         String data = HttpUtil.getRequest(listUrl, params, "utf-8");
         String total = JsonPath.read(data, "$['result']['total']");
         Integer num = Integer.parseInt(total);
-        List<String> urls = Lists.newArrayListWithExpectedSize(num);
         List<String> list = stringRedisTemplate.opsForList().range(SINA_NEWS_URLS, 0, -1);
         if (list != null && list.size() > 0) {
             stringRedisTemplate.delete(SINA_NEWS_URLS);
@@ -90,13 +62,13 @@ public class SinaTransfer {
             String url = "http://platform.sina.com.cn/news/news_list?app_key=2872801998&show_cat=1&show_num=10&channel=mil&cat_1=dgby&format=json&tag=1&page=" + i + "&show_all=0&show_ext=1";
             stringRedisTemplate.opsForList().leftPush(SINA_NEWS_URLS, url);
         }
-        return urls;
     }
 
-    public void parseAndStore(String path) {
-        sinaQueue(path, SINA_NEWS_URLS);
-
+    @Override
+    public void handle() {
+        writeDb();
     }
+
 
     public void writeDb() {
         log.info("开始写入数据库中存储");
@@ -109,7 +81,7 @@ public class SinaTransfer {
     }
 
     private void writeDb(List<LinkedHashMap<String, String>> datas) {
-        datas.forEach(data -> newsMapper.insert(getNews(data)));
+        newsService.insert(datas);
     }
 
     private void dbQueue(String sinaNewsUrls) {
@@ -132,38 +104,12 @@ public class SinaTransfer {
         }
     }
 
-    private void sinaQueue(String path, String sinaNewsUrls) {
-        while (true) {
-            String url = stringRedisTemplate.opsForList().rightPop(sinaNewsUrls);
-            if (url == null) {
-                break;
-            }
-            asyncTaskExecutor.execute(() -> {
-                String request = HttpUtil.getRequest(url);
-                if (Strings.isNullOrEmpty(request)) {
-                    log.warn("请求url:{} 失败，将当前请求加入失败队列", url);
-                    stringRedisTemplate.opsForList().leftPush(FAILURE_URLS, url);
-                } else {
-                    List<LinkedHashMap<String, String>> datas = JsonPath.read(request, "$['result']['data'][*]");
-                    dealData(datas, path);
-                }
-            });
-
-        }
-    }
 
 
 
-    public void failure(String path) {
-        sinaQueue(path, FAILURE_URLS);
-    }
 
-    private void dealData(List<LinkedHashMap<String, String>> datas, String path) {
-        datas.forEach(data -> {
-            String jsonString = toJson(data);
-            writeStringToFile(jsonString, new File(path));
-        });
-    }
+
+
 
 
 }

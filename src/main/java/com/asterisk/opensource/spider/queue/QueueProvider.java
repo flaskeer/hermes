@@ -32,23 +32,5 @@ public enum  QueueProvider {
         return BLOCKINGQUEUE;
     }
 
-    /**
-     * 默认用jdk的blockingQueue
-     * @return
-     */
-    public MessageQueue getMessageQueue(QueueProvider queueProvider) {
-        switch (queueProvider) {
-            case KAFKA:
-                return new KafkaMessageQueue();
-            case RABBITMQ:
-                return new RabbitMessageQueue();
-            case REDIS:
-                return new RedisMessageQueue();
-            case ROCKETMQ:
-                return new RocketMessageQueue();
-            case BLOCKINGQUEUE:
-                return new MemoryMessageQueue();
-        }
-        return new MemoryMessageQueue();
-    }
+
 }

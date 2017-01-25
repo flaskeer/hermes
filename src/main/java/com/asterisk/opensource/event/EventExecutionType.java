@@ -11,7 +11,7 @@ public enum  EventExecutionType {
 
     EXECUTE_FAILURE,
 
-    EXECUTE_SUCCESS;
+    EXECUTE_SUCCESS
 
 
 

@@ -17,11 +17,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SpdierExecutorTask {
 
-    private static final String STORE_PATH = "sina.json";
 
     @Autowired
     private SinaTransfer sinaTransfer;
-
 
     /**
      * 这个做一次全量更新
@@ -29,9 +27,8 @@ public class SpdierExecutorTask {
     @Scheduled(fixedRate = 50000000)
     public void schedule() {
         log.info("开始执行爬虫任务.......");
-        sinaTransfer.getUrls();
-//        sinaTransfer.parseAndStore(STORE_PATH);
-        sinaTransfer.writeDb();
+        sinaTransfer.insertQueue();
+        sinaTransfer.handle();
         log.info("爬虫任务结束.....");
     }
 

@@ -7,12 +7,11 @@
 		<result column="url" property="url" />
 		<result column="keywords" property="keywords" />
 		<result column="title" property="title" />
-		<result column="context" property="context" />
 	</resultMap>
 
 	<insert id="insert" parameterType="com.asterisk.opensource.domain.News" useGeneratedKeys="true" keyProperty="id">
-	  insert into `news` (url,keywords,title,context)
-	  values (#{url},#{keywords},#{title},#{context})
+	  insert into `news` (url,keywords,title)
+	  values (#{url},#{keywords},#{title})
 	</insert>
 
 	<delete id="delete">
@@ -25,7 +24,6 @@
 			url = #{url},
 			keywords = #{keywords},
 			title = #{title},
-			context = #{context},
 		</set>
 		where id = #{id}
 	</update>
@@ -38,7 +36,6 @@
 					<when test="field == 'url'">url = #{news.url},</when>
 					<when test="field == 'keywords'">keywords = #{news.keywords},</when>
 					<when test="field == 'title'">title = #{news.title},</when>
-					<when test="field == 'context'">context = #{news.context},</when>
 				</choose>
 				</foreach>
 			</set>
@@ -47,14 +44,14 @@
 
 	<select id="findOne" resultMap="baseResultMap" parameterType="long">
 		select
-		id,url,keywords,title,context
+		id,url,keywords,title
 		from `news`
 		where id = #{id}
 	</select>
 
 	<select id="findAll" resultMap="baseResultMap">
 		select
-		id,url,keywords,title,context
+		id,url,keywords,title
 		from `news`
 		order by id desc
 	</select>

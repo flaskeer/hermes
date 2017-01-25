@@ -12,4 +12,7 @@ public class Constants {
     public static final String PREPROD_KEY = "preprod";
 
 
+    public static final String FAILURE_URLS = "failure_urls";
+    public static final String SINA_NEWS_URLS = "sina:news:urls";
+
 }

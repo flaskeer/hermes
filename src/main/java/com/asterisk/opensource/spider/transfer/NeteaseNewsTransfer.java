@@ -63,14 +63,12 @@ public class NeteaseNewsTransfer {
     }
 
     private boolean isAcessAndPushUrlToQueue(String requestUrl) {
-        boolean flag;
         if (Strings.isNullOrEmpty(requestUrl)) {
-            flag = false;
-            return flag;
+            return false;
         }
         CloseableHttpClient client = HttpUtil.getHttpClient();
         HttpGet httpGet = new HttpGet(requestUrl);
-        CloseableHttpResponse response = null;
+        CloseableHttpResponse response;
         try {
             response = client.execute(httpGet);
             int statuCode = response.getStatusLine().getStatusCode();

@@ -24,3 +24,14 @@ CREATE TABLE `black_white_list` (
   `black_white_type` int(2) DEFAULT NULL,
   `server` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `news`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `news` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` varchar(100) DEFAULT NULL,
+  `keywords` varchar(100) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8350 DEFAULT CHARSET=utf8;
