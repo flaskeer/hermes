@@ -30,6 +30,7 @@
         <feign-gson.version>8.18.0</feign-gson.version>
         <spring.kafka.version>1.1.1.RELEASE</spring.kafka.version>
         <commons-io.version>2.4</commons-io.version>
+        <intergation.kafka.version>2.1.0.RELEASE</intergation.kafka.version>
     </properties>
 
 
@@ -64,6 +65,11 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
@@ -72,6 +78,13 @@
             <artifactId>spring-kafka</artifactId>
             <version>${spring.kafka.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-kafka</artifactId>
+            <version>${intergation.kafka.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>

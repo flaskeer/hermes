@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class FailQueueExecutorTask {
+public class SinaFailQueueExecutorTask {
 
     private static final String STORE_PATH = "sina.json";
 
