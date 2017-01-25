@@ -37,6 +37,8 @@ public class SinaTransfer implements Transfer{
     @Autowired
     private NewsService newsService;
 
+
+
     @Override
     public void insertQueue() {
         String listUrl = "http://platform.sina.com.cn/news/news_list";

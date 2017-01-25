@@ -2,12 +2,14 @@ package com.asterisk.opensource.service;
 
 import com.asterisk.opensource.domain.News;
 import com.asterisk.opensource.mapper.NewsMapper;
+import com.asterisk.opensource.search.NewsSearchRepo;
 import com.asterisk.opensource.utils.MyStringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author donghao
@@ -20,9 +22,20 @@ public class NewsService {
     @Autowired
     private NewsMapper newsMapper;
 
+    @Autowired
+    private NewsSearchRepo newsSearchRepo;
+
+    private AtomicInteger counter = new AtomicInteger(0);
+
 
     public void insert(List<LinkedHashMap<String, String>> datas) {
-        datas.forEach(data -> newsMapper.insert(getNews(data)));
+        datas.forEach(data -> {
+            News news = getNews(data);
+            newsMapper.insert(news);
+            news.setId(counter.getAndIncrement());
+            newsSearchRepo.save(news);
+
+        });
     }
 
 

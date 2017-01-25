@@ -25,4 +25,12 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
+  data:
+    elasticsearch:
+      cluster-nodes: 127.0.0.1:9300,127.0.0.1:9301
+      cluster-name:
+      properties:
+        client.transport.ignore_cluster_name: true
+
+
 
