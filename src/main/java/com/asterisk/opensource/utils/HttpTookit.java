@@ -119,12 +119,6 @@ public class HttpTookit {
         return null;
     }
 
-    public static void main(String[] args) {
-        String getData = doGet("http://www.oschina.net/", null);
-        System.out.println(getData);
-        System.out.println("----------------------分割线-----------------------");
-        String postData = doPost("http://www.oschina.net/", null);
-        System.out.println(postData);
-    }
+
 
 }

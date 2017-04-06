@@ -48,7 +48,8 @@ public class XinLanNewsPageProcessor implements PageProcessor {
         return urls;
     }
 
-    public static void main(String[] args) {
+
+    private static void execute() {
         String[] urls = getUrls();
         Spider.create(new XinLanNewsPageProcessor())
                 // 从"https://github.com/code4craft"开始抓
