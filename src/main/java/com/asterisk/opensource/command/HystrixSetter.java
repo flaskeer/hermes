@@ -37,10 +37,11 @@ public class HystrixSetter {
         return new HystrixSetter(80000, 80000, 50, 50, 100, 15);
     }
 
-    public HystrixSetter() {}
+    public HystrixSetter() {
+    }
 
     public HystrixSetter(int eitTimeout, int etimeout,
-                         int cbRequests, int cbErrorRate,int threadPoolCoreSize,
+                         int cbRequests, int cbErrorRate, int threadPoolCoreSize,
                          int threadPoolQueueSize) {
         this.eitTimeout = eitTimeout;
         this.etimeout = etimeout;
@@ -49,7 +50,6 @@ public class HystrixSetter {
         this.threadPoolCoreSize = threadPoolCoreSize;
         this.threadPoolQueueSize = threadPoolQueueSize;
     }
-
 
 
 }
