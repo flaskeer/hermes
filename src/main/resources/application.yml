@@ -27,10 +27,9 @@ spring:
     port: 5672
   data:
     elasticsearch:
-      cluster-nodes: 127.0.0.1:9300,127.0.0.1:9301
-      cluster-name:
-      properties:
-        client.transport.ignore_cluster_name: true
+      cluster-nodes: 10.16.37.123:9300
+      cluster-name: sms-application
+
 
 
 

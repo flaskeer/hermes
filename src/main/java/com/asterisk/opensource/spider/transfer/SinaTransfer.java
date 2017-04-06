@@ -73,12 +73,12 @@ public class SinaTransfer implements Transfer{
 
 
     public void writeDb() {
-        log.info("开始写入数据库中存储");
+        log.info("write to db start !!!");
         dbQueue(SINA_NEWS_URLS);
     }
 
     public void failureToDb() {
-        log.info("将失败任务插入数据库中");
+        log.info("write fail job to db ...");
         dbQueue(FAILURE_URLS);
     }
 
