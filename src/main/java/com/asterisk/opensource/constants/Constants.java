@@ -15,4 +15,9 @@ public class Constants {
     public static final String FAILURE_URLS = "failure_urls";
     public static final String SINA_NEWS_URLS = "sina:news:urls";
 
+
+    public static final String NETEASE_FAILURE_URLS = "netease:guonei:failure:urls";
+
+    public static final String NETEASE__NEWS_URLS = "netease:guonei:news:urls";
+
 }

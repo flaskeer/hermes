@@ -2,7 +2,6 @@ package com.asterisk.opensource.spider.fetch;
 
 import com.asterisk.opensource.utils.HttpUtil;
 import com.asterisk.opensource.utils.MyStringUtil;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -27,7 +26,7 @@ public class NeteaseUrls {
 
     }
 
-    public static List<String> allUrls() {
+    private static List<String> allUrls() {
         return neteaseModules.stream()
                 .map(neteaseModule -> url(neteaseModule, position()))
                 .flatMap(Collection::stream)
