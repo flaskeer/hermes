@@ -23,30 +23,42 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dudycoco on 17-1-12.
- */
+
 @Slf4j
 public class NeteaseNewsTransfer {
 
-    public static final String FAILURE_URLS = "netease_guonei_failure_urls";
+    private static final String FAILURE_URLS = "netease:guonei:failure:urls";
+
     private static final String NETEASE_GUONEI_NEWS_URLS = "netease:guonei:news:urls";
+
+    private static final String START_URL = "http://temp.163.com/special/00804KVA/cm_guonei.js";
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
-    private ExceptionHandlingAsyncTaskExecutor asyncTaskExecutor;
+    private  ExceptionHandlingAsyncTaskExecutor asyncTaskExecutor;
+
+
+
+
+    private static void writeJsonToFile(String json, String storePath) {
+        try {
+            FileUtils.writeStringToFile(new File(storePath), json, true);
+        } catch (IOException e) {
+            log.error("存储文件失败");
+        }
+    }
 
     public void storeUrsToQueue() {
-        String starturl = "http://temp.163.com/special/00804KVA/cm_guonei.js";
         Map<String, String> params = Maps.newHashMap();
         params.put("callback", "data_callback");
         List<String> urls = Lists.newArrayList();
-        urls.add(starturl);
+        urls.add(START_URL);
         int x = 2;
         while (true) {
-            int subpostion = starturl.lastIndexOf(".");
-            String url = starturl.substring(0, subpostion);
+            int subpostion = START_URL.lastIndexOf(".");
+            String url = START_URL.substring(0, subpostion);
             if (x < 10) {
                 url = url + "_0" + x + ".js";
             } else {
@@ -105,7 +117,6 @@ public class NeteaseNewsTransfer {
         netEaseQueue(storePath, NETEASE_GUONEI_NEWS_URLS);
     }
 
-
     private void datapersisted(String result, String storePath) {
         List<NeteaseNewsVo> list = beanToJson(result);
         List<NeteaseNews> neteaseNewsList = trans(list);
@@ -125,17 +136,9 @@ public class NeteaseNewsTransfer {
     }
 
     private String listToString(Object object) {
-        return JSON.toJSONString(object).replace("\"","").replace("[","").replace("]","")
-                .replace("{","").replace("}","");
+        return JSON.toJSONString(object).replace("\"", "").replace("[", "").replace("]", "")
+                .replace("{", "").replace("}", "");
 
-    }
-
-    private static void writeJsonToFile(String json, String storePath) {
-        try {
-            FileUtils.writeStringToFile(new File(storePath), json, true);
-        } catch (IOException e) {
-            log.error("存储文件失败");
-        }
     }
 
     private List<NeteaseNewsVo> beanToJson(String result) {
