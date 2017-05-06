@@ -32,9 +32,6 @@ public class MyStringUtil {
 	}
 
 	public static boolean isNullOrEmptyOr404(String string) {
-		if (Strings.isNullOrEmpty(string) || string.contains("404失效页面寻人计划")) {
-			return true;
-		}
-		return false;
+		return Strings.isNullOrEmpty(string) || string.contains("404失效页面寻人计划");
 	}
 }
