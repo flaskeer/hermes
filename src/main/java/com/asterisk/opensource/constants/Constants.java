@@ -20,4 +20,6 @@ public class Constants {
 
     public static final String NETEASE__NEWS_URLS = "netease:guonei:news:urls";
 
+    public static final String NETEASENEWS_EVENT_NAME = "NETEASE_NEWS_PARSER";
+
 }
