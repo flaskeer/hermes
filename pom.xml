@@ -7,8 +7,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.RELEASE</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <version>1.5.3.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.asterisk.opensource</groupId>
@@ -28,9 +28,8 @@
         <webmagic.version>0.6.0</webmagic.version>
         <gson.version>2.7</gson.version>
         <feign-gson.version>8.18.0</feign-gson.version>
-        <spring.kafka.version>1.1.1.RELEASE</spring.kafka.version>
         <commons-io.version>2.4</commons-io.version>
-        <intergation.kafka.version>2.1.0.RELEASE</intergation.kafka.version>
+        <spring-cloud-kafka.version>1.2.0.RELEASE</spring-cloud-kafka.version>
     </properties>
 
 
@@ -52,6 +51,7 @@
     </dependencyManagement>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -69,22 +69,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+            <version>${spring-cloud-kafka.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>${spring.kafka.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-kafka</artifactId>
-            <version>${intergation.kafka.version}</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>

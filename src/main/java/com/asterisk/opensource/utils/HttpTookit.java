@@ -13,15 +13,14 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class HttpTookit {
 
-    private static final CloseableHttpClient httpClient;
     public static final String CHARSET = "UTF-8";
+    private static final CloseableHttpClient httpClient;
 
     static {
         RequestConfig config = RequestConfig.custom().setConnectTimeout(60000).setSocketTimeout(15000).build();
@@ -33,7 +32,7 @@ public class HttpTookit {
     }
 
     public static String doPost(String url, Map<String, String> params) {
-        return doPost(url, params, CHARSET);
+        return post(url, params);
     }
 
     /**
@@ -75,19 +74,18 @@ public class HttpTookit {
     /**
      * HTTP Post 获取内容
      *
-     * @param url     请求的url地址 ?之前的地址
-     * @param params  请求的参数
-     * @param charset 编码格式
+     * @param url    请求的url地址 ?之前的地址
+     * @param params 请求的参数
      * @return 页面内容
      */
-    public static String doPost(String url, Map<String, String> params, String charset) {
+    public static String post(String url, Map<String, String> params) {
         if (StringUtils.isBlank(url)) {
             return null;
         }
         try {
             List<NameValuePair> pairs = null;
             if (params != null && !params.isEmpty()) {
-                pairs = new ArrayList<NameValuePair>(params.size());
+                pairs = new ArrayList<>(params.size());
                 for (Map.Entry<String, String> entry : params.entrySet()) {
                     String value = entry.getValue();
                     if (value != null) {
@@ -119,12 +117,5 @@ public class HttpTookit {
         return null;
     }
 
-    public static void main(String[] args) {
-        String getData = doGet("http://www.oschina.net/", null);
-        System.out.println(getData);
-        System.out.println("----------------------分割线-----------------------");
-        String postData = doPost("http://www.oschina.net/", null);
-        System.out.println(postData);
-    }
 
 }

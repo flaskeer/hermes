@@ -1,6 +1,5 @@
 package com.asterisk.opensource.config;
 
-import com.asterisk.opensource.spider.queue.RedisMessageQueue;
 import com.asterisk.opensource.spider.transfer.NeteaseNewsTransfer;
 import com.asterisk.opensource.spider.transfer.SinaTransfer;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +18,5 @@ public class OpenSourceConfiguration {
         return new NeteaseNewsTransfer();
     }
 
-    @Bean
-    public RedisMessageQueue redisMessageQueue() {
-        return new RedisMessageQueue();
-    }
 
 }

@@ -22,15 +22,15 @@ spring:
       max-idle: 20
       min-idle: 0
     timeout: 0
-  rabbitmq:
-    host: localhost
-    port: 5672
   data:
     elasticsearch:
       cluster-nodes: 127.0.0.1:9300,127.0.0.1:9301
       cluster-name:
       properties:
         client.transport.ignore_cluster_name: true
+  kafka:
+    producer:
+      batch-size: 20
 
 
 

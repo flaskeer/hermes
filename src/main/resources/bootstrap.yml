@@ -8,6 +8,7 @@ spring:
 
 server:
   port: 8888
-
-
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 20
 
