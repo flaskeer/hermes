@@ -1,5 +1,7 @@
 package com.asterisk.opensource.utils;
 
+import com.google.common.base.Strings;
+
 public class MyStringUtil {
 
 	public static String decodeUnicode(String s) {  
@@ -27,5 +29,12 @@ public class MyStringUtil {
 		        sb.append(c);
 		    }
 		    return sb.toString();
+	}
+
+	public static boolean isNullOrEmptyOr404(String string) {
+		if (Strings.isNullOrEmpty(string) || string.contains("404失效页面寻人计划")) {
+			return true;
+		}
+		return false;
 	}
 }

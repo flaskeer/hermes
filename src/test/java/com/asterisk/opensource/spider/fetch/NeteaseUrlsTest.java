@@ -1,10 +1,6 @@
-package com.asterisk.opensource.spider.parser;
+package com.asterisk.opensource.spider.fetch;
 
 import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * @author donghao
