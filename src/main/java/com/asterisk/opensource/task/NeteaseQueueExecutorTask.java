@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by dudycoco on 17-1-15.
- */
+
 @Slf4j
 @Component
 public class NeteaseQueueExecutorTask {
 
-    private static final String  SOTRE_PATH = "netease.json";
+    private static final String  STORE_PATH = "netease.json";
 
     @Autowired
     private NeteaseNewsTransfer neteaseNewsTransfer;
@@ -22,7 +20,17 @@ public class NeteaseQueueExecutorTask {
     public void schedule(){
         log.info("开始执行爬虫任务.......");
         neteaseNewsTransfer.storeUrsToQueue();
-        neteaseNewsTransfer.parseAndStore(SOTRE_PATH);
+        neteaseNewsTransfer.parseAndStore(STORE_PATH);
         log.info("爬虫任务结束.....");
+    }
+
+    /**
+     * 任务补偿 把失败的任务队列定时重试
+     */
+    @Scheduled(fixedDelay = 5000)
+    public void failTask() {
+        log.info("开始重新执行失败的任务.....");
+        neteaseNewsTransfer.failure(STORE_PATH);
+        log.info("失败任务执行完毕.....");
     }
 }
