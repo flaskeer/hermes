@@ -48,7 +48,8 @@ public class XinLanNewsPageProcessor implements PageProcessor {
         return urls;
     }
 
-    public static void main(String[] args) {
+
+    private static void execute() {
         String[] urls = getUrls();
         Spider.create(new XinLanNewsPageProcessor())
                 // 从"https://github.com/code4craft"开始抓
@@ -71,9 +72,7 @@ public class XinLanNewsPageProcessor implements PageProcessor {
         // 部分二：定义如何抽取页面信息，并保存下来
         String json = page.getRawText();
         List<JSONObject> datas = JsonPath.read(json, "$['result']['data'][*]");
-        List<Request> requests = Lists.newArrayList();
         for (JSONObject jsonObject : datas) {
-            String id = (String) jsonObject.get("id");
             String url = (String) jsonObject.get("url");
             String keywords = (String) jsonObject.get("keywords");
             String title = (String) jsonObject.get("title");

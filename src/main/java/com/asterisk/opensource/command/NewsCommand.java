@@ -7,7 +7,11 @@ import com.asterisk.opensource.domain.News;
  * @Date 17/1/25
  * @Time 下午3:52
  */
-public class NewsCommand extends BaseCommand<News>{
+public class NewsCommand extends BaseCommand<News> {
+
+
+
+
 
     public NewsCommand() {
         super();
@@ -17,4 +21,6 @@ public class NewsCommand extends BaseCommand<News>{
     protected News run() throws Exception {
         return null;
     }
+
+
 }

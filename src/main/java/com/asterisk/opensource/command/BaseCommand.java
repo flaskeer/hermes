@@ -15,16 +15,16 @@ public abstract class BaseCommand<T> extends HystrixCommand<T> {
 
 
     public static HystrixCommand.Setter buildSetter(HystrixSetter hs) {
-        HystrixCommand.Setter setter= HystrixCommand.Setter
+        HystrixCommand.Setter setter = HystrixCommand.Setter
                 //Command分组KEY
                 .withGroupKey(HystrixCommandGroupKey.Factory.asKey(hs.getCommandGroupKey()));
         //Command KEY
-        setter=setter.andCommandKey(HystrixCommandKey.Factory.asKey(hs.getCommandKey()));
+        setter = setter.andCommandKey(HystrixCommandKey.Factory.asKey(hs.getCommandKey()));
         //线程池KEY
-        setter=setter.andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(hs.getThreadPoolKey()));
+        setter = setter.andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(hs.getThreadPoolKey()));
 
         //Command资源设置
-        setter=setter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+        setter = setter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                 //超时控制
                 .withExecutionTimeoutInMilliseconds(hs.getEtimeout())//执行超时时间,默认为1000ms
                 //断路器
@@ -35,7 +35,7 @@ public abstract class BaseCommand<T> extends HystrixCommand<T> {
                 .withFallbackIsolationSemaphoreMaxConcurrentRequests(hs.getFismRequests()));
 
         //线程池设置
-        setter=setter.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
+        setter = setter.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
                 //核心线程数
                 .withCoreSize(hs.getThreadPoolCoreSize())//线程池设置:线程池核心线程数,默认为10
                 //Queue

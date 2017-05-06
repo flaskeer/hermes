@@ -31,9 +31,5 @@ public class FoodTransfer {
     }
 
 
-    public static void main(String[] args) {
-        foodExactor("http://enjoy.ricebook.com/innerpage/140,5,0",headers());
-    }
-
 
 }
