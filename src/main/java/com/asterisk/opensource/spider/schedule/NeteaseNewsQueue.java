@@ -2,7 +2,7 @@ package com.asterisk.opensource.spider.schedule;
 
 import com.asterisk.opensource.event.ExecutionEventBusFactory;
 import com.asterisk.opensource.event.SpiderExecutionEvent;
-import com.asterisk.opensource.spider.fetch.NeteaseUrls;
+import com.asterisk.opensource.spider.collector.NeteaseUrls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

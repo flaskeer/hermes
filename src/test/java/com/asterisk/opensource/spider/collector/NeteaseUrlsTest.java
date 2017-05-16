@@ -1,4 +1,4 @@
-package com.asterisk.opensource.spider.fetch;
+package com.asterisk.opensource.spider.collector;
 
 import org.junit.Test;
 

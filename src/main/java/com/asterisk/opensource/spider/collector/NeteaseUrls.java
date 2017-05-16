@@ -1,4 +1,4 @@
-package com.asterisk.opensource.spider.fetch;
+package com.asterisk.opensource.spider.collector;
 
 import com.asterisk.opensource.utils.HttpUtil;
 import com.asterisk.opensource.utils.MyStringUtil;
