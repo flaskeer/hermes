@@ -27,7 +27,7 @@ public class JsoupUtil {
                 document = connection.get();
                 break;
             } catch (IOException e) {
-                log.error("get document error:{},",e);
+                log.error("get document error",e);
                 log.info("当前重试次数:{}",i);
                 if (i == retryTimes) {
                     log.error("已经超出最大重试次数,请检查请求是否正确");
